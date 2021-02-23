@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--default font size-->
+    <dimen name="font_size_smallest_smallest">8sp</dimen>
+    <dimen name="font_size_smallest">10sp</dimen>
+    <dimen name="font_size_smaller">11sp</dimen>
+    <dimen name="font_size_small">12sp</dimen>
+    <dimen name="font_size_semi_medium">14sp</dimen>
+    <dimen name="font_size_medium">16sp</dimen>
+    <dimen name="font_size_medium_v2">18sp</dimen>
+    <dimen name="font_size_semi_large">20sp</dimen>
+    <dimen name="font_size_large">22sp</dimen>
+    <dimen name="font_size_larger">24sp</dimen>
+    <dimen name="font_size_largest">28sp</dimen>
+    <dimen name="font_size_super_large">30sp</dimen>
+    <dimen name="font_size_super_larger">34sp</dimen>
+    <dimen name="font_size_super_largest">40sp</dimen>
+
+    <!--repository_view_item-->
+    <dimen name="card_view_corner_radius">5dp</dimen>
+    <dimen name="card_view_elevation">10dp</dimen>
+    <dimen name="card_view_margin">10dp</dimen>
+    <dimen name="card_view_container_margin">10dp</dimen>
+    <dimen name="contributor_username_margin_top">15dp</dimen>
+    <dimen name="progressbar_size">15dp</dimen>
+    <dimen name="progressbar_margin_start">5dp</dimen>
+    <dimen name="addition_deletion_commit_margin_start">20dp</dimen>
+
+</resources>

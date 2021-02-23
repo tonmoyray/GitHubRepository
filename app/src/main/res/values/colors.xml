@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="repository_name">#0082F4</color>
+    <color name="repository_language">#0061F5</color>
+    <color name="repository_username">#356095</color>
+    <color name="repository_author">#656565</color>
+    <color name="repository_contribution">#515151</color>
+    <color name="repository_description">@color/black</color>
+
 </resources>

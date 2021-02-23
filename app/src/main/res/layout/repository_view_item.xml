@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:foreground="@drawable/cardview_background"
+    android:layout_margin="@dimen/card_view_margin"
+    app:cardCornerRadius="@dimen/card_view_corner_radius"
+    app:cardElevation="@dimen/card_view_elevation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_view_container_margin">
+
+        <TextView
+            android:id="@+id/repo_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_name"
+            android:textSize="@dimen/font_size_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Repository Name"/>
+
+        <TextView
+            android:id="@+id/repo_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_author"
+            android:textSize="@dimen/font_size_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_name"
+            tools:text="Repo Author"/>
+
+
+        <TextView
+            android:id="@+id/repo_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_author"
+            tools:text="A short description about this repository...."/>
+
+        <TextView
+            android:id="@+id/repo_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_language"
+            android:textSize="@dimen/font_size_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_description"
+            tools:text="Language" />
+
+        <TextView
+            android:id="@+id/contributor_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/contributor_username_margin_top"
+            android:text="@string/active_contributor_username"
+            android:textSize="@dimen/font_size_semi_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_language" />
+
+        <TextView
+            android:id="@+id/contributor_username_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_username"
+            android:textSize="@dimen/font_size_semi_medium"
+            app:layout_constraintStart_toEndOf="@+id/contributor_username"
+            app:layout_constraintTop_toTopOf="@+id/contributor_username"
+            tools:text="UserName" />
+
+        <ProgressBar
+            android:id="@+id/username_progress"
+            android:layout_width="@dimen/progressbar_size"
+            android:layout_height="@dimen/progressbar_size"
+            android:layout_marginStart="@dimen/progressbar_margin_start"
+            android:indeterminateTint="@color/repository_username"
+            app:layout_constraintStart_toEndOf="@+id/contributor_username"
+            app:layout_constraintTop_toTopOf="@+id/contributor_username"
+            app:layout_constraintBottom_toBottomOf="@+id/contributor_username" />
+
+
+        <TextView
+            android:id="@+id/additions_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/contributor_username"
+            tools:text="224" />
+
+        <ProgressBar
+            android:id="@+id/additions_progress"
+            android:layout_width="@dimen/progressbar_size"
+            android:layout_height="@dimen/progressbar_size"
+            android:layout_marginStart="@dimen/progressbar_margin_start"
+            android:text="@string/commits"
+            android:indeterminateTint="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/additions_value"
+            app:layout_constraintTop_toTopOf="@+id/additions_value"
+            app:layout_constraintBottom_toBottomOf="@+id/additions_value" />
+
+        <TextView
+            android:id="@+id/additions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/addition_deletion_commit_margin_start"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_smaller"
+            android:text="@string/additions"
+            app:layout_constraintStart_toEndOf="@+id/additions_value"
+            app:layout_constraintTop_toBottomOf="@+id/contributor_username" />
+
+        <TextView
+            android:id="@+id/deletions_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/additions"
+            tools:text="224" />
+
+        <ProgressBar
+            android:id="@+id/deletions_progress"
+            android:layout_width="@dimen/progressbar_size"
+            android:layout_height="@dimen/progressbar_size"
+            android:layout_marginStart="@dimen/progressbar_margin_start"
+            android:indeterminateTint="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/deletions_value"
+            app:layout_constraintTop_toTopOf="@+id/deletions_value"
+            app:layout_constraintBottom_toBottomOf="@+id/deletions_value"
+            tools:text="@string/commits" />
+
+
+        <TextView
+            android:id="@+id/deletions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/addition_deletion_commit_margin_start"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_smaller"
+            android:text="@string/deletions"
+            app:layout_constraintStart_toEndOf="@+id/deletions_value"
+            app:layout_constraintTop_toBottomOf="@+id/additions"
+            tools:ignore="RtlCompat" />
+
+
+
+        <TextView
+            android:id="@+id/commits_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_small"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deletions"
+            tools:ignore="RtlCompat"
+            tools:text="224" />
+
+        <ProgressBar
+            android:id="@+id/commits_progress"
+            android:layout_width="@dimen/progressbar_size"
+            android:layout_height="@dimen/progressbar_size"
+            android:layout_marginStart="@dimen/progressbar_margin_start"
+            android:indeterminateTint="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/commits_value"
+            app:layout_constraintTop_toTopOf="@+id/commits_value"
+            app:layout_constraintBottom_toBottomOf="@+id/commits_value"
+            tools:text="@string/commits" />
+
+        <TextView
+            android:id="@+id/commits"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/addition_deletion_commit_margin_start"
+            android:text="@string/commits"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_smaller"
+            app:layout_constraintStart_toEndOf="@+id/commits_value"
+            app:layout_constraintTop_toBottomOf="@+id/deletions" />
+
+        <TextView
+            android:id="@+id/updated_on"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/repository_contribution"
+            android:textSize="@dimen/font_size_smaller"
+            app:layout_constraintTop_toTopOf="@+id/commits"
+            app:layout_constraintBottom_toBottomOf="@+id/commits"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/updated_on" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
+
