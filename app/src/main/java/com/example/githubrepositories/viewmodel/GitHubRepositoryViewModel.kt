@@ -23,13 +23,13 @@ class GitHubRepositoryViewModel(private val gitHubRepository: GithubRepository) 
 
     private val LOG_TAG = "GitHubRepositoryViewModel"
 
-    private var searchString: String? = null
+    private var currentQueryValue: String? = null
     var currentSearchResult: LiveData<PagingData<Repository>>? = null
 
     var maxContributor: MutableLiveData<Repository> = MutableLiveData()
         private set
 
-    private var currentQueryValue: String? = null
+
 
     fun searchRepo(queryString: String): LiveData<PagingData<Repository>> {
         val lastResult = currentSearchResult

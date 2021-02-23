@@ -26,4 +26,8 @@
     <dimen name="progressbar_margin_start">5dp</dimen>
     <dimen name="addition_deletion_commit_margin_start">20dp</dimen>
 
+    <!--search view-->
+    <dimen name="search_input_layout_margin">8dp</dimen>
+    <dimen name="search_icon_size">50dp</dimen>
+
 </resources>

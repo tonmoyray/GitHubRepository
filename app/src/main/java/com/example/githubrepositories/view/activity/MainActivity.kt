@@ -1,11 +1,18 @@
 package com.example.githubrepositories.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.view.View.OnFocusChangeListener
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.map
 import com.example.githubrepositories.R
 import com.example.githubrepositories.data.model.Repository
@@ -13,11 +20,12 @@ import com.example.githubrepositories.data.remote.GitHubApiService
 import com.example.githubrepositories.data.repository.GithubRepository
 import com.example.githubrepositories.databinding.ActivityMainBinding
 import com.example.githubrepositories.utils.CommonHelper
+import com.example.githubrepositories.utils.CustomToast
 import com.example.githubrepositories.utils.ViewModelFactory
 import com.example.githubrepositories.view.adapter.RepositoryAdapter
 import com.example.githubrepositories.viewmodel.GitHubRepositoryViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 /**
 * <h1>MainActivity</h1>
@@ -32,7 +40,18 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     private val LOG_TAG = "MainActivity"
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var viewModel: GitHubRepositoryViewModel
-    private val adapter = RepositoryAdapter(this)
+    private lateinit var adapter : RepositoryAdapter
+
+    private var searchJob: Job? = null
+    private var query : String = ""
+
+    private var doubleBackToExitPressedOnce = false
+    private val coroutineJob = Job()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + coroutineJob)
+
+    companion object {
+        private const val LAST_SEARCH_QUERY: String = "last_search_query"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +60,17 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
         viewModel = ViewModelProvider(this, ViewModelFactory(GithubRepository(GitHubApiService.create())))
             .get(GitHubRepositoryViewModel::class.java)
 
+        query = savedInstanceState?.getString(LAST_SEARCH_QUERY) ?: ""
         initWidget()
         initObserver()
-        search("tonmoy") //TODO for testing
     }
 
-    private var searchJob: Job? = null
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LAST_SEARCH_QUERY, activityMainBinding.searchRepo.text.trim().toString())
+    }
+
+
     private fun search(query: String) {
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
@@ -55,7 +79,57 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     }
 
     private fun initWidget() {
+        adapter = RepositoryAdapter(this)
         activityMainBinding.list.adapter = adapter
+        initSearch()
+    }
+
+    private fun initSearch() {
+        activityMainBinding.searchRepo.setText(query)
+
+        activityMainBinding.searchRepo.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                updateRepoListFromInput()
+                true
+            } else {
+                false
+            }
+        }
+        activityMainBinding.searchRepo.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                updateRepoListFromInput()
+                true
+            } else {
+                false
+            }
+        }
+
+        // Scroll to top when the list is refreshed from network.
+        lifecycleScope.launch {
+            adapter.loadStateFlow
+                    // Only emit when REFRESH LoadState for RemoteMediator changes.
+                    .distinctUntilChangedBy { it.refresh }
+                    // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                    .filter { it.refresh is LoadState.NotLoading }
+                    .collect { activityMainBinding.list.scrollToPosition(0) }
+        }
+
+        activityMainBinding.searchRepo.onFocusChangeListener = OnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                activityMainBinding.searchIcon.visibility = View.GONE
+            } else {
+                activityMainBinding.searchIcon.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun updateRepoListFromInput() {
+        activityMainBinding.searchRepo.text.trim().let {
+            if (it.isNotEmpty()) {
+                activityMainBinding.list.scrollToPosition(0)
+                search(it.toString())
+            }
+        }
     }
 
     private fun initObserver() {
@@ -70,11 +144,10 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
             val pagingData = viewModel.currentSearchResult?.value
 
             pagingData?.map {
-                if (updatedRepo.position == it.position){
+                if (updatedRepo.position == it.position) {
                     CommonHelper.printLog(LOG_TAG, " updated repository $it")
                     return@map it.copy(countribution = updatedRepo.countribution)
-                }
-                else return@map it
+                } else return@map it
             }
             adapter.notifyItemChanged(updatedRepo.position)
         })
@@ -82,5 +155,26 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
 
     override fun fetchMaxContributor(repo: Repository) {
        // viewModel.getMaxContributor(repo)
+    }
+
+    /**
+     * Method for exit the app
+     * @see doubleBackToExitPressedOnce boolean if true on press exit the app
+     * Reset [doubleBackToExitPressedOnce] on 3 second delay
+     */
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        CustomToast.makeText(this, getString(R.string.exit_toast), Toast.LENGTH_SHORT).show()
+
+        coroutineScope.launch {
+            delay(3000L)
+            doubleBackToExitPressedOnce = false
+        }
+
     }
 }

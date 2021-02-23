@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">GitHubRepositories</string>
-    <string name="loading">Loading</string>
     <string name="language">Language: %s</string>
     <string name="active_contributor_username">Most Active Contributor: </string>
     <string name="additions">additions</string>
@@ -8,4 +7,6 @@
     <string name="commits">commits</string>
     <string name="updated_on">Updated On %s</string>
     <string name="unknown">---</string>
+    <string name="search_hint">Search for a repository</string>
+    <string name="exit_toast">Press BACK again to exit the application</string>
 </resources>

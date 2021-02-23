@@ -15,4 +15,8 @@
     <color name="repository_contribution">#515151</color>
     <color name="repository_description">@color/black</color>
 
+    <color name="app_toast_background_color">@color/purple_500</color>
+    <color name="app_toast_text_color">@color/white</color>
+
+
 </resources>
