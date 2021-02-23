@@ -8,6 +8,7 @@ import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
 
 
     private fun search(query: String) {
+        CommonHelper.hideSoftKeyBoard(this, activityMainBinding.root)
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
             viewModel.searchRepo(query).collectLatest {
@@ -84,6 +86,24 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     private fun initWidget() {
         adapter = RepositoryAdapter(this)
         activityMainBinding.list.adapter = adapter
+        adapter.addLoadStateListener { loadState ->
+            activityMainBinding.list.isVisible = loadState.source.refresh is LoadState.NotLoading
+            activityMainBinding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            activityMainBinding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+            if( adapter.itemCount == 0
+                && loadState.source.refresh !is LoadState.Loading){
+                activityMainBinding.empty.visibility =  View.VISIBLE
+            }else{
+                activityMainBinding.empty.visibility =  View.INVISIBLE
+            }
+            val errorState = loadState.source.append as? LoadState.Error
+                ?: loadState.source.prepend as? LoadState.Error
+                ?: loadState.append as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                CustomToast.makeText(this, "Error ${it.error}", Toast.LENGTH_LONG).show()
+            }
+        }
         initSearch()
     }
 
@@ -136,12 +156,6 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     }
 
     private fun initObserver() {
-
- /*       viewModel.currentSearchResult?.observe(this, Observer {
-            CommonHelper.printLog(LOG_TAG, " result repository $it")
-            adapter.submitData(this.lifecycle,it)
-        })*/
-
         viewModel.maxContributor.observe(this, Observer { updatedRepo ->
 
             val pagingData = viewModel.currentSearchResult?.asLiveData()?.value

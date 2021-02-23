@@ -1,5 +1,8 @@
 package com.example.githubrepositories.utils
 
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.example.githubrepositories.BuildConfig
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -75,5 +78,21 @@ object CommonHelper {
         val cal = Calendar.getInstance()
         cal.time = date
         return day.format(cal.time)
+    }
+
+    /**
+     * Method for hiding soft keypad in GUI
+     * @param context
+     * @param view
+     * @usage hideSoftKeyBoard(context, view)
+     * @author Tonmoy Ray
+     * */
+    fun hideSoftKeyBoard(context: Context, view: View) {
+        try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

@@ -9,4 +9,5 @@
     <string name="unknown">---</string>
     <string name="search_hint">Search for a repository</string>
     <string name="exit_toast">Press BACK again to exit the application</string>
+    <string name="empty">Empty</string>
 </resources>
