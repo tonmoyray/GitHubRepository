@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.example.githubrepositories.data.model.Repository
 import com.example.githubrepositories.data.repository.GithubRepository
 import com.example.githubrepositories.utils.CommonHelper
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 /**
@@ -24,20 +25,20 @@ class GitHubRepositoryViewModel(private val gitHubRepository: GithubRepository) 
     private val LOG_TAG = "GitHubRepositoryViewModel"
 
     private var currentQueryValue: String? = null
-    var currentSearchResult: LiveData<PagingData<Repository>>? = null
+    var currentSearchResult: Flow<PagingData<Repository>>? = null
 
     var maxContributor: MutableLiveData<Repository> = MutableLiveData()
         private set
 
 
 
-    fun searchRepo(queryString: String): LiveData<PagingData<Repository>> {
+    fun searchRepo(queryString: String): Flow<PagingData<Repository>> {
         val lastResult = currentSearchResult
         if (queryString == currentQueryValue && lastResult != null) {
             return lastResult
         }
         currentQueryValue = queryString
-        val newResult: LiveData<PagingData<Repository>> = gitHubRepository.getSearchResultStream(queryString)
+        val newResult: Flow<PagingData<Repository>> = gitHubRepository.getSearchResultStream(queryString)
             .cachedIn(viewModelScope)
         currentSearchResult = newResult
         return newResult

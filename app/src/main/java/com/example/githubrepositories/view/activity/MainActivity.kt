@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.map
@@ -74,7 +75,9 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     private fun search(query: String) {
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
-            viewModel.searchRepo(query)
+            viewModel.searchRepo(query).collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 
@@ -134,14 +137,14 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
 
     private fun initObserver() {
 
-        viewModel.currentSearchResult?.observe(this, Observer {
+ /*       viewModel.currentSearchResult?.observe(this, Observer {
             CommonHelper.printLog(LOG_TAG, " result repository $it")
             adapter.submitData(this.lifecycle,it)
-        })
+        })*/
 
         viewModel.maxContributor.observe(this, Observer { updatedRepo ->
 
-            val pagingData = viewModel.currentSearchResult?.value
+            val pagingData = viewModel.currentSearchResult?.asLiveData()?.value
 
             pagingData?.map {
                 if (updatedRepo.position == it.position) {
@@ -154,7 +157,7 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
     }
 
     override fun fetchMaxContributor(repo: Repository) {
-       // viewModel.getMaxContributor(repo)
+        viewModel.getMaxContributor(repo)
     }
 
     /**

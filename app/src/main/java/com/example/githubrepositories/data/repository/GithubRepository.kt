@@ -11,6 +11,7 @@ import com.example.githubrepositories.data.remote.GitHubApiService
 import com.example.githubrepositories.data.remote.response.Contribution
 import com.example.githubrepositories.utils.CommonHelper
 import com.example.githubrepositories.utils.exception.NoContentException
+import kotlinx.coroutines.flow.Flow
 
 /**
  * <h1>GithubRepository</h1>
@@ -23,14 +24,14 @@ import com.example.githubrepositories.utils.exception.NoContentException
 class GithubRepository(private val apiService: GitHubApiService) {
     private val LOG_TAG = "GithubRepository"
 
-    fun getSearchResultStream(query: String): LiveData<PagingData<Repository>> {
+    fun getSearchResultStream(query: String): Flow<PagingData<Repository>> {
 
         CommonHelper.printLog(LOG_TAG, " getSearchResultStream $query , apiService $apiService")
 
         return  Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = { RepositorySearchPagingSource(apiService, query) }
-        ).liveData
+        ).flow
     }
 
     suspend fun getMaxContributor(repo : Repository) : Repository {
@@ -56,9 +57,9 @@ class GithubRepository(private val apiService: GitHubApiService) {
             }else{
                 repo.countributionNotAvailable = true
             }
-        }catch (e : NoContentException){
+        }catch (e : NoContentException){ //TODO: cause no json response. Is there a better way to handle this ?
             repo.countributionNotAvailable = true
-        }catch (e : Exception){
+        }catch (e : Exception){  //TODO: cause empty json response {}. Is there a better way to handle this ?
             repo.countributionNotAvailable = true
         }
         return repo
