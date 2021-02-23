@@ -21,6 +21,7 @@ import com.example.githubrepositories.data.model.Repository
 import com.example.githubrepositories.data.remote.GitHubApiService
 import com.example.githubrepositories.data.repository.GithubRepository
 import com.example.githubrepositories.databinding.ActivityMainBinding
+import com.example.githubrepositories.utils.AutoFitGridLayoutManager
 import com.example.githubrepositories.utils.CommonHelper
 import com.example.githubrepositories.utils.CustomToast
 import com.example.githubrepositories.utils.ViewModelFactory
@@ -85,6 +86,7 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
 
     private fun initWidget() {
         adapter = RepositoryAdapter(this)
+        activityMainBinding.list.layoutManager = AutoFitGridLayoutManager(this, 1000)
         activityMainBinding.list.adapter = adapter
         adapter.addLoadStateListener { loadState ->
             activityMainBinding.list.isVisible = loadState.source.refresh is LoadState.NotLoading
@@ -143,6 +145,9 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
             } else {
                 activityMainBinding.searchIcon.visibility = View.VISIBLE
             }
+        }
+        if(query.isNotEmpty()){
+            search(query)
         }
     }
 
