@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
             activityMainBinding.list.isVisible = loadState.source.refresh is LoadState.NotLoading
             activityMainBinding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             activityMainBinding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+            viewModel.currentSearchResultIsError = loadState.source.refresh is LoadState.Error
             if( adapter.itemCount == 0
                 && loadState.source.refresh !is LoadState.Loading){
                 activityMainBinding.empty.visibility =  View.VISIBLE
@@ -105,6 +106,9 @@ class MainActivity : AppCompatActivity(), RepositoryAdapter.AdapterListener {
             errorState?.let {
                 CustomToast.makeText(this, "Error ${it.error}", Toast.LENGTH_LONG).show()
             }
+        }
+        activityMainBinding.retryButton.setOnClickListener {
+            updateRepoListFromInput()
         }
         initSearch()
     }

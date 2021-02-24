@@ -1,6 +1,5 @@
 package com.example.githubrepositories.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,11 +29,12 @@ class GitHubRepositoryViewModel(private val gitHubRepository: GithubRepository) 
     var maxContributor: MutableLiveData<Repository> = MutableLiveData()
         private set
 
+    var currentSearchResultIsError: Boolean = false
 
 
     fun searchRepo(queryString: String): Flow<PagingData<Repository>> {
         val lastResult = currentSearchResult
-        if (queryString == currentQueryValue && lastResult != null) {
+        if (queryString == currentQueryValue && lastResult != null && !currentSearchResultIsError) {
             return lastResult
         }
         currentQueryValue = queryString
