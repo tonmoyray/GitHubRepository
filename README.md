@@ -27,7 +27,7 @@ A simple application to search for repositories in GitHub.
 
 ## Scenarios
 
-1.Potrait & Landscape Mode: The recycler view may show items in Gridlayout depending on screen width.
+1.Potrait & Landscape Mode: The recycler view will show items side by side in landscape mode as there are more space.
 <p align="center">
   <img src="https://github.com/tonmoyray/GitHubRepository/blob/master/screenshots/main_page_landscape.png" width="600" height="300"/>
 </p>
