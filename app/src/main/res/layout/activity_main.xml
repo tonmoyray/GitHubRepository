@@ -15,14 +15,12 @@
             android:background="@color/white">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:fitsSystemWindows="true">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="pin">
